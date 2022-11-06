@@ -322,6 +322,7 @@ class Account extends CI_Controller
 	}
 	private function loginLogs()
 	{
+		var_dump(getallheaders());
 		$ip = $this->input->ip_address();
 
 		$browser = $this->agent->browser();

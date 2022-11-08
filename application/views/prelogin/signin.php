@@ -16,11 +16,11 @@
 
 
             <label for="email">Email:</label>
-            <input class="signInInput" placeholder="tony@starkindustries.com" name="email" type="email" autofocus required>
+            <input class="signInInput" placeholder="tony@starkindustries.com" name="email" type="email" autocomplete="email" autofocus required>
 
             <label for="password">Password:</label>
             <div class="password_container">
-                <input id="password" class="signInInput" placeholder="●●●●●●●●●●" name="password" type="password" value="" required>
+                <input id="password" class="signInInput" placeholder="●●●●●●●●●●" name="password" type="password" autocomplete="current-password" value="" required>
                 <span class="showPasswordBtn" id="showPasswordBtn" onclick="show_password()"> <i class="fa-regular fa-eye"></i></span>
             </div>
             <!-- Show Password -->

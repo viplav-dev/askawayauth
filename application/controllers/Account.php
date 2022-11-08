@@ -148,10 +148,11 @@ class Account extends CI_Controller
 			$userDetails = $this->AccountModel->login($email, $hash, 'userHash');
 
 			if ($userDetails) {
-				$this->loginLogs();
 				$this->session->set_userdata('userDetails', $userDetails);
+				$this->loginLogs();
+			   
 
-				return redirect(base_url('dashboard'));
+				// return redirect(base_url('dashboard'));
 			} else {
 				if ($emailCheck) {
 					$response = array('status' => 'false', 'msg' => messages()['invalidUserEmailPass']);
@@ -324,7 +325,6 @@ class Account extends CI_Controller
 	{
 		$header=getallheaders();
 		$ip = $header['X-Forwarded-For'];
-
 		$browser = $this->agent->browser();
 		$browserVersion = $this->agent->version();
 		$os = $this->agent->platform();
@@ -338,22 +338,23 @@ class Account extends CI_Controller
 		// Set the url
 		curl_setopt($ch, CURLOPT_URL, $url);
 		// Execute
-		$result = curl_exec($ch);
+		$resultJson = curl_exec($ch);
+		$result=json_decode($resultJson);
 		// Closing
 		curl_close($ch);
-
-		// Will dump a beauty json :3
 		var_dump($result);
 
+		
+
 		$array = array(
-			'loginLogIpAddress' => $ip,
-			'loginLogCity' => $result['city'],
-			'loginLogState' => $result['region'],
-			'loginLogCountry' => $result['country'],
-			'loginLogLoc' => $result['loc'],
-			'LoginLogOrg' => $result['org'],
-			'loginLogPinCode' => $result['postal'],
-			'loginLogTimeZone' => $result['timezone'],
+			'loginLogIpAddress' => $result->ip,
+			'loginLogCity' => $result->city,
+			'loginLogState' => $result ->region,
+			'loginLogCountry' => $result->country,
+			'loginLogLoc' => $result->loc,
+			'LoginLogOrg' => $result ->org,
+			'loginLogPinCode' => $result ->postal,
+			'loginLogTimeZone' => $result ->timezone,
 			'loginLogBrowser' => $browser,
 			'loginLogIsRobot' => $this->agent->is_robot(),
 			'loginLogBrowserVersion' => $browserVersion,

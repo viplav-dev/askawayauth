@@ -88,6 +88,7 @@ class Account extends CI_Controller
 				$userDetails = $this->AccountModel->login($email, $token, 'userOneTimeLoginToken');
 				$this->AccountModel->resetOneTimeLogin($email);
 				$this->session->set_userdata('userDetails', $userDetails);
+				$this->loginLogs();
 				$response = array('status' => 'true', 'msg' => messages()['loginSuccessful']);
 				$this->session->set_flashdata('toaster', $response);
 				return redirect(base_url('dashboard'));

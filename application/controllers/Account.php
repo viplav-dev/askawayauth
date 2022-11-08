@@ -152,7 +152,7 @@ class Account extends CI_Controller
 				$this->loginLogs();
 			   
 
-				// return redirect(base_url('dashboard'));
+				return redirect(base_url('dashboard'));
 			} else {
 				if ($emailCheck) {
 					$response = array('status' => 'false', 'msg' => messages()['invalidUserEmailPass']);
@@ -366,7 +366,6 @@ class Account extends CI_Controller
 			'loginLogReferrer' => $this->agent->referrer(),
 
 		);
-		var_dump($array);
-		return;
+		$this->AccountModel->loginLogs($array);
 	}
 }

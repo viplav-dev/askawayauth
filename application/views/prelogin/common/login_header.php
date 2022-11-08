@@ -29,7 +29,7 @@
         <div class="footerContainer">
           
             <div class="footerRightContainer">
-                <p style="display:inline;">&copy <a href="mailto:contact@viplav.dev">Viplav Pandhurnekar</a> </p>
+                <p style="display:inline;">&copy <a style="color:white" href="mailto:contact@viplav.dev">Viplav Pandhurnekar</a> <a style="margin:0px 20px" href="">Login Logs</a> </p>
             </div>
 
 

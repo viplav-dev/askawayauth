@@ -71,4 +71,11 @@ class AccountModel extends CI_Model
         $this->db->insert('loginlogs',$data);
         return $this->db->affected_rows();
     }
+    public function fetchAllLoginLogs(){
+        $this->db->select('*');
+        $this->db->from('loginlogs');
+        $query = $this->db->get();
+        $result = $query->result_array();
+        return $result;
+    }
 }

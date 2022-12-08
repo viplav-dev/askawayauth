@@ -69,7 +69,7 @@ hr {
 
 .headerContainer {
 	background-color: #fff;
-    
+
 	border-bottom: 1px solid $primarygray;
 	box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
 	padding: 0.5rem 1rem;
@@ -145,7 +145,7 @@ hr {
 		}
 
 		.ctaButton:hover {
-			 color: $primarywhite;
+			color: $primarywhite;
 			background-color: $primaryblack;
 			border: 2px solid $primaryblack;
 		}
@@ -292,19 +292,19 @@ hr {
 			}
 		}
 		.password_container {
-			display: flex;
+			
 			position: relative;
-			margin-bottom: 50px;
+			
 
 			#password {
-				position: absolute;
+				
 			}
-			#showPasswordBtn {
+			.showPasswordBtn {
 				cursor: pointer;
 				color: $primaryblue;
 				position: absolute;
 				right: 10px;
-				top: 13px;
+				top: 10px;
 
 				margin-bottom: 50px;
 			}

@@ -19,14 +19,15 @@
 
             <label for="password">Password:</label>
             <div class="password_container">
-                <input id="password" class="signInInput" placeholder="●●●●●●●●●●" name="password" type="password" value="" required>
+                <input id="password" class="signInInput" placeholder="●●●●●●●●●●" name="password" type="password" value="" oninput="passwordMatch()" required>
                 <span class="showPasswordBtn" id="showPasswordBtn" onclick="show_password()"> <i class="fa-regular fa-eye"></i></span>
             </div>
             <label for="password">Confirm Password:</label>
             <div class="password_container">
-                <input id="confirmpassword" class="signInInput" placeholder="●●●●●●●●●●" name="confirmPassword" type="confirmpassword" value="" required>
-                <span class="showPasswordBtn" id="showPasswordBtn" onclick="show_password()"> <i class="fa-regular fa-eye"></i></span>
+                <input id="confirmpassword" class="signInInput" placeholder="●●●●●●●●●●" name="confirmPassword" type="confirmpassword" oninput="passwordMatch()" value="" required>
+                <span class="showPasswordBtn" id="showPasswordBtn2" onclick="show_password2()"> <i class="fa-regular fa-eye"></i></span>
             </div>
+            <p id="passwordMatchAlert"></p>
 
             <p>By clicking Sign Up you agree to our <a target="__blank" href="<?php echo base_url("account/privacypolicy") ?>">Privacy Policy</a><br> & <a target="__blank" href="<?php echo base_url("account/termsofservice") ?>">Terms of Service</a>.</p>
             <!-- Show Password -->
@@ -49,6 +50,7 @@
     function show_password() {
         var x = document.getElementById("password");
         var y = document.getElementsByClassName("showPasswordBtn");
+
         if (x.type === "password") {
             x.type = "text";
             y[0].innerHTML = '<i class="fa-regular fa-eye-slash"></i>';
@@ -56,5 +58,32 @@
             x.type = "password";
             y[0].innerHTML = "<i class='fa-regular fa-eye'></i>";
         }
+    }
+
+    function show_password2() {
+        var z = document.getElementById("confirmpassword");
+        var w = document.getElementById("showPasswordBtn2");
+        if (z.type === "password") {
+            z.type = "text";
+            w.innerHTML = '<i class="fa-regular fa-eye-slash"></i>';
+        } else {
+            z.type = "password";
+            w.innerHTML = "<i class='fa-regular fa-eye'></i>";
+        }
+    }
+    function passwordMatch(){
+        var password = document.getElementById("password").value;
+        var confirmPassword = document.getElementById("confirmpassword").value;
+        if (password != confirmPassword) {
+            document.getElementById("passwordMatchAlert").innerHTML = "Passwords do not match.";
+            document.getElementById("passwordMatchAlert").style.color = "red";
+            return false;
+        }
+        else{
+            document.getElementById("passwordMatchAlert").innerHTML = "Password Matched";
+            document.getElementById("passwordMatchAlert").style.color = "green";
+            return true;
+        }
+
     }
 </script>

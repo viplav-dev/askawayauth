@@ -27,11 +27,10 @@ class Logs extends CI_Controller
         header("Pragma: no-cache");
         header("Expires: 0");
 
-        $headers[] = array('loginLogId', 'loginLogIpAddress', 'loginLogCity', 'loginLogState', 'loginLogCountry', 'loginLogLoc', 'LoginLogOrg', 'loginLogPinCode', 'loginLogTimeZone', 'loginLogBrowser', 'loginLogIsRobot', 'loginLogBrowserVersion', 'loginLogMobile', 'loginLogRobot', 'loginLogPlatform', 'loginLogReferrer', 'loginLogUserId', 'loginLogTimestamp');
+        $headers[] = array('loginLogId', 'loginLogIpAddress', 'loginLogCity', 'loginLogState', 'loginLogCountry', 'loginLogLoc', 'LoginLogOrg', 'loginLogPinCode', 'loginLogTimeZone', 'loginLogBrowser', 'loginLogIsRobot', 'loginLogBrowserVersion', 'loginLogMobile', 'loginLogPlatform', 'loginLogReferrer', 'loginLogUserId', 'loginLogTimestamp','loginLogSessionDuration','loginLogTotalRequests','loginLogAvgRequests');
         $data = $this->AccountModel->fetchAllLoginLogs();
         $result=array_merge($headers, $data);
-        
-         $this->outputCSV( $result);
+        $this->outputCSV( $result);
     }
     private function outputCSV( $data)
     {

@@ -12,6 +12,7 @@ class Dashboard extends CI_Controller
 
         $this->load->library('encryption');
         $this->load->model('PasswordModel');
+        $this->load->model('AccountModel');
         $this->encryption->initialize(
             array(
                 'cipher' => 'aes-256',
@@ -24,6 +25,7 @@ class Dashboard extends CI_Controller
         if (!$this->session->userdata('userDetails')) {
             return redirect(base_url());
         }
+        $this->sessionLogEntry();
     }
     public function index()
     {
@@ -50,16 +52,46 @@ class Dashboard extends CI_Controller
         $data['title'] = "View Password";
         $this->load->view('postlogin/common/header', $data);
         $userId = $this->session->userdata('userDetails')['userId'];
-        $data['password'] = $this->PasswordModel->getPassword($userId,$passwordId);
-        if($data['password']){
+        $data['password'] = $this->PasswordModel->getPassword($userId, $passwordId);
+        if ($data['password']) {
             $data['password']['pswd_enc'] = $this->encryption->decrypt($data['password']['pswd_enc']);
             $data['password']['username'] = $this->encryption->decrypt($data['password']['username']);
             $this->load->view('viewPassword', $data);
-        }
-        else{
+        } else {
             $response = array('status' => 'false', 'msg' => messages()['passwordNotFound']);
-			$this->session->set_flashdata('toaster', $response);
-			return redirect(base_url('dashboard'));
+            $this->session->set_flashdata('toaster', $response);
+            return redirect(base_url('dashboard'));
         }
+    }
+    private function sessionLogEntry()
+    {
+        
+        $this->inactivityLogout();
+        $this->session->set_userdata('sessionLastRequestTime', time());
+        $this->session->set_userdata('sessionDuration', time() - $this->session->userdata('sessionStartTime'));
+        if ($this->session->userdata('sessionDuration') == 0) {
+            $this->session->set_userdata('sessionDuration', 1);
+        };
+        $this->session->set_userdata('sessionTotalRequests', $this->session->userdata('sessionTotalRequests') + 1);
+        $this->session->set_userdata(
+            'sessionAvgRequests',
+            ($this->session->userdata('sessionTotalRequests') / ($this->session->userdata('sessionDuration') / 60))
+        );
+        $array = array(
+            'loginLogTotalRequests' => $this->session->userdata('sessionTotalRequests'),
+            'loginLogSessionDuration' => $this->session->userdata('sessionDuration'),
+            'loginLogAvgRequests' => $this->session->userdata('sessionAvgRequests'),
+        );
+        $this->AccountModel->updateLoginLogs($this->session->userdata('loginLogId'), $array);
+    }
+    private function inactivityLogout()
+    {
+        // if (time() - $this->session->userdata('sessionLastRequestTime') > 300) {
+        //     $this->session->session_abort();
+        //     $this->session->session_regenerate_id(true);
+        //     $response = array('status' => 'false', 'msg' => messages()['sessionExpired']);
+        //     $this->session->set_flashdata('toaster', $response);
+        //     return redirect(base_url());
+        // }
     }
 }

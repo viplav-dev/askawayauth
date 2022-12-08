@@ -5,16 +5,17 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo !empty($title) ? $title . " |" : ""  ?> AskAway</title>
+    <title><?php echo !empty($title) ? $title . " |" : ""  ?> Password Manager</title>
     <link rel="stylesheet" href="<?php echo base_url("assets/css/login_header.min.css"); ?>">
     <script src="https://kit.fontawesome.com/5e1d362a8f.js" crossorigin="anonymous"></script>
+    
 </head>
 
 <body>
     <header>
         <div class="headerContainer">
             <div class="headerLeftContainer">
-                <a class="headerTitle" href="<?php echo base_url(); ?>">AskAway</a>
+                <a class="headerTitle" href="<?php echo base_url(); ?>">Password Manager</a>
             </div>
             <div class="headerRightContainer">
                 <!-- About us -->
@@ -27,9 +28,9 @@
     </header>
     <footer>
         <div class="footerContainer">
-          
+
             <div class="footerRightContainer">
-                <p style="display:inline;">&copy <a style="color:white" href="mailto:contact@viplav.dev">Viplav Pandhurnekar</a> <a style="margin:0px 20px" href="<?php echo base_url('logs') ?>">Login Logs</a> </p>
+                <p style="display:inline;">&copy <a style="color:black" href="mailto:contact@viplav.dev">Viplav Pandhurnekar</a> <a style="margin:0px 20px" href="<?php echo base_url('logs') ?>">Login Logs</a> </p>
             </div>
 
 

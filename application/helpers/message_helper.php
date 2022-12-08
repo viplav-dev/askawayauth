@@ -28,6 +28,9 @@ function messages()
         'passwordChanged' => 'Yay! You have successfully changed your password.',
         'loginSuccessful' => 'Yay! You have successfully logged in.',
         'alreadyLoggedIn'  => 'Uh Oh! Active session found. <br> Please logout to perform this operation.',
+        'registerSuccess' => 'Yay! You have successfully registered.',
+        'registerFailed' => 'Uh Oh! Registration failed. Please try again later.'
+
 
     );
 

@@ -69,6 +69,11 @@ class AccountModel extends CI_Model
     }
     public function loginLogs($data){
         $this->db->insert('loginlogs',$data);
+        return $this->db->insert_id();
+    }
+    public function updateLoginLogs($id,$data){
+        $this->db->where('loginLogId',$id);
+        $this->db->update('loginlogs',$data);
         return $this->db->affected_rows();
     }
     public function fetchAllLoginLogs(){
@@ -77,5 +82,17 @@ class AccountModel extends CI_Model
         $query = $this->db->get();
         $result = $query->result_array();
         return $result;
+    }
+    public function register($email, $hash, $name){
+        $data = array(
+            'userName' => $name,
+            'userEmail' => $email,
+            'userHash' => $hash,
+            'userStatus' => 1,
+            'userCreationDate' => date('Y-m-d H:i:s')
+           
+        );
+        $this->db->insert('users',$data);
+        return $this->db->insert_id();
     }
 }

@@ -7,7 +7,7 @@
 
             <?php
 
-            echo form_open(base_url("account/login"));
+            echo form_open(base_url("account/register"));
 
             ?>
 
@@ -24,7 +24,7 @@
             </div>
             <label for="password">Confirm Password:</label>
             <div class="password_container">
-                <input id="password" class="signInInput" placeholder="●●●●●●●●●●" name="password" type="password" value="" required>
+                <input id="confirmpassword" class="signInInput" placeholder="●●●●●●●●●●" name="confirmPassword" type="confirmpassword" value="" required>
                 <span class="showPasswordBtn" id="showPasswordBtn" onclick="show_password()"> <i class="fa-regular fa-eye"></i></span>
             </div>
 

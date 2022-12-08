@@ -27,21 +27,7 @@ class Account extends CI_Controller
 		$this->load->view('prelogin/common/login_header', $data);
 		$this->load->view('privacyPolicy');
 	}
-	/**
-	 * Index Page for this controller.
-	 *
-	 * Maps to the following URL
-	 * 		http://example.com/index.php/welcome
-	 *	- or -
-	 * 		http://example.com/index.php/welcome/index
-	 *	- or -
-	 * Since this controller is set as the default controller in
-	 * config/routes.php, it's displayed at http://example.com/
-	 *
-	 * So any other public methods not prefixed with an underscore will
-	 * map to /index.php/welcome/<method_name>
-	 * @see https://codeigniter.com/userguide3/general/urls.html
-	 */
+	
 	public function index()
 	{
 
@@ -88,7 +74,8 @@ class Account extends CI_Controller
 				$userDetails = $this->AccountModel->login($email, $token, 'userOneTimeLoginToken');
 				$this->AccountModel->resetOneTimeLogin($email);
 				$this->session->set_userdata('userDetails', $userDetails);
-				$this->loginLogs();
+				$this->session->set_userdata('loginLogId', $this->loginLogs());
+				$this->startSessionLogs();
 				$response = array('status' => 'true', 'msg' => messages()['loginSuccessful']);
 				$this->session->set_flashdata('toaster', $response);
 				return redirect(base_url('dashboard'));
@@ -150,9 +137,8 @@ class Account extends CI_Controller
 
 			if ($userDetails) {
 				$this->session->set_userdata('userDetails', $userDetails);
-				$this->loginLogs();
-			   
-
+				$this->session->set_userdata('loginLogId', $this->loginLogs());
+				$this->startSessionLogs();
 				return redirect(base_url('dashboard'));
 			} else {
 				if ($emailCheck) {
@@ -165,6 +151,36 @@ class Account extends CI_Controller
 			}
 		} else {
 			$response = array('status' => 'false', 'msg' => messages()['enterValidEmailPass']);
+			$this->session->set_flashdata('toaster', $response);
+			return redirect($currentTab);
+		}
+	}
+	public function register(){
+		$this->checkSession();
+		$currentTab = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
+		$this->form_validation->set_rules('email', 'Email Id', 'required|valid_email|is_unique[users.userEmail]');
+		$this->form_validation->set_rules('password', 'Password', 'required');
+		$this->form_validation->set_rules('confirmPassword', 'Confirm Password', 'required|matches[password]');
+		$this->form_validation->set_rules('name', 'Name', 'required');
+		
+		if ($this->form_validation->run()) {
+			$email = $this->input->post('email');
+			$password = $this->input->post('password');
+			$hash = hash('sha256', $password);
+			$name = $this->input->post('name');
+			$register = $this->AccountModel->register($email, $hash, $name);
+			
+			if ($register) {
+				$response = array('status' => 'true', 'msg' => messages()['registerSuccess']);
+				$this->session->set_flashdata('toaster', $response);
+				return redirect(base_url('account/signin'));
+			} else {
+				$response = array('status' => 'false', 'msg' => messages()['registerFailed']);
+				$this->session->set_flashdata('toaster', $response);
+				return redirect($currentTab);
+			}
+		} else {
+			$response = array('status' => 'false', 'msg' => messages()['registerFailed']);
 			$this->session->set_flashdata('toaster', $response);
 			return redirect($currentTab);
 		}
@@ -324,14 +340,14 @@ class Account extends CI_Controller
 	}
 	private function loginLogs()
 	{
-		$header=getallheaders();
+		$header = getallheaders();
 		$ip = $header['X-Forwarded-For'];
 		$browser = $this->agent->browser();
 		$browserVersion = $this->agent->version();
 		$os = $this->agent->platform();
 		$device = $this->agent->mobile();
 		$device = $device ? 'Mobile' : 'Desktop';
-		$url='https://ipinfo.io/'.$ip.'?token=ae8175e1aaccae';
+		$url = 'https://ipinfo.io/' . $ip . '?token=ae8175e1aaccae';
 		//  Initiate curl
 		$ch = curl_init();
 		// Will return the response, if false it print the response
@@ -340,33 +356,38 @@ class Account extends CI_Controller
 		curl_setopt($ch, CURLOPT_URL, $url);
 		// Execute
 		$resultJson = curl_exec($ch);
-		$result=json_decode($resultJson);
+		$result = json_decode($resultJson);
 		// Closing
 		curl_close($ch);
-		var_dump($result);
-
 		
-
 		$array = array(
 			'loginLogIpAddress' => $result->ip,
 			'loginLogCity' => $result->city,
-			'loginLogState' => $result ->region,
+			'loginLogState' => $result->region,
 			'loginLogCountry' => $result->country,
 			'loginLogLoc' => $result->loc,
-			'LoginLogOrg' => $result ->org,
-			'loginLogPinCode' => $result ->postal,
-			'loginLogTimeZone' => $result ->timezone,
+			'LoginLogOrg' => $result->org,
+			'loginLogPinCode' => $result->postal,
+			'loginLogTimeZone' => $result->timezone,
 			'loginLogBrowser' => $browser,
 			'loginLogIsRobot' => $this->agent->is_robot(),
 			'loginLogBrowserVersion' => $browserVersion,
 			'loginLogMobile' => $device,
-			'loginLogRobot' => $this->agent->robot(),
 			'loginLogPlatform' => $os,
 			'loginLogUserId' => $this->session->userdata('userDetails')['userId'],
 			'loginLogTimestamp' => time(),
 			'loginLogReferrer' => $this->agent->referrer(),
 
 		);
-		$this->AccountModel->loginLogs($array);
+		return $this->AccountModel->loginLogs($array);
+	}
+	private function startSessionLogs()
+	{
+
+		$this->session->set_userdata('sessionStartTime', time());
+		$this->session->set_userdata('sessionLastRequestTime', time());
+		$this->session->set_userdata('sessionTotalRequests', 0);
+		$this->session->set_userdata('sessionDuration', 1);
+		$this->session->set_userdata('sessionAvgRequests', 0);
 	}
 }
